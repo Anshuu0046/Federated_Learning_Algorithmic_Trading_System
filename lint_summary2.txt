@@ -1,0 +1,67 @@
+
+--- \.venv\Lib\site-packages\matplotlib\backends\web_backend\js\mpl.js ---
+Line 9: 'MozWebSocket' is not defined.
+Line 107: '_canvas_div' is defined but never used.
+Line 109: '_canvas_div' is defined but never used.
+Line 333: '_e' is defined but never used.
+Line 354: '_event' is defined but never used.
+Line 444: '_msg' is defined but never used.
+Line 495: '_msg' is defined but never used.
+Line 576: 'e' is defined but never used.
+Line 657: '_event' is defined but never used.
+Line 657: '_name' is defined but never used.
+
+--- \.venv\Lib\site-packages\matplotlib\backends\web_backend\js\mpl_tornado.js ---
+Line 6: 'mpl_ondownload' is defined but never used. Allowed unused vars must match /^[A-Z_]/u.
+
+--- \.venv\Lib\site-packages\matplotlib\backends\web_backend\js\nbagg_mpl.js ---
+Line 11: '_event' is defined but never used.
+Line 54: '_format' is defined but never used.
+Line 90: 'IPython' is not defined.
+Line 101: '_remove_interactive' is defined but never used.
+Line 111: 'IPython' is not defined.
+Line 129: '_event' is defined but never used.
+Line 190: '_evt' is defined but never used.
+Line 222: 'IPython' is not defined.
+Line 223: 'IPython' is not defined.
+Line 226: 'IPython' is not defined.
+Line 230: '_name' is defined but never used.
+Line 235: 'IPython' is not defined.
+Line 236: 'IPython' is not defined.
+Line 240: '_msg' is defined but never used.
+Line 249: 'IPython' is not defined.
+Line 270: 'IPython' is not defined.
+Line 271: 'IPython' is not defined.
+
+--- \.venv\Lib\site-packages\sklearn\utils\_repr_html\estimator.js ---
+Line 1: 'copyToClipboard' is defined but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 106: 'forceTheme' is defined but never used. Allowed unused vars must match /^[A-Z_]/u.
+
+--- \.venv\Lib\site-packages\torch\utils\model_dump\code.js ---
+Line 57: 'children' is defined but never used.
+Line 524: 'offset' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 524: 'size' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 524: 'stride' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 524: 'grad' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 525: 'dtype' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 525: 'device' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 525: 'numel' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 529: 'offset' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 529: 'size' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 529: 'stride' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 529: 'quantizer' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 529: 'grad' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 530: 'dtype' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 530: 'device' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 530: 'numel' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 538: 'name' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+Line 544: 'key' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+
+--- \dump_lint.js ---
+Line 1: 'require' is not defined.
+
+--- \src\components\clients\ClientCard.jsx ---
+Line 6: 'status' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u.
+
+--- \src\components\server\ServerPanel.jsx ---
+Line 52: '_idx' is defined but never used.

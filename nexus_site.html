@@ -1,0 +1,2021 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>NEXUS — Federated Intelligence</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px
+    }
+
+    body {
+      background: #f5f2ec;
+      color: #1a1a18;
+      font-family: 'Instrument Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    img {
+      display: block;
+      width: 100%
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit
+    }
+
+    /* ─── CSS VARIABLES ─────────────────────────────── */
+    :root {
+      --cream: #f5f2ec;
+      --cream2: #ede9df;
+      --ink: #1a1a18;
+      --ink2: #2d2d29;
+      --mid: #8a8a80;
+      --light: #c4c0b4;
+      --rule: #d6d2c8;
+      --accent: #c8a96e;
+      --accent2: #2d4a3e;
+      --white: #faf9f6;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Instrument Sans', sans-serif;
+    }
+
+    /* ─── CUSTOM CURSOR ─────────────────────────────── */
+    #cur {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: var(--ink);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s, background 0.2s, width 0.25s, height 0.25s;
+    }
+
+    #cur-ring {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(26, 26, 24, 0.3);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    body:has(a:hover) #cur,
+    body:has(button:hover) #cur {
+      width: 14px;
+      height: 14px;
+      background: var(--accent)
+    }
+
+    body:has(a:hover) #cur-ring,
+    body:has(button:hover) #cur-ring {
+      width: 56px;
+      height: 56px;
+      border-color: var(--accent);
+      opacity: 0.5
+    }
+
+    /* ─── NAV ─────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 72px;
+      mix-blend-mode: multiply;
+      transition: background 0.4s, mix-blend-mode 0.4s;
+    }
+
+    nav.solid {
+      background: var(--cream);
+      mix-blend-mode: normal;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+    }
+
+    .nav-logo span {
+      font-style: italic;
+      color: var(--accent)
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink2);
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 2px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--ink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink)
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1)
+    }
+
+    .nav-cta {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 11px 24px;
+      border: 1px solid var(--ink);
+      color: var(--ink);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: var(--sans);
+      font-weight: 400;
+    }
+
+    .nav-cta:hover {
+      background: var(--ink);
+      color: var(--cream)
+    }
+
+    /* ─── HERO ─────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #0e0e0c;
+    }
+
+    .hero-video-wrap {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .hero-video-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0c1a14 0%, #0e0e0c 40%, #1a120a 100%);
+    }
+
+    /* Animated grain on hero */
+    .hero-video-bg::after {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      animation: grainMove 0.8s steps(2) infinite;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    @keyframes grainMove {
+      0% {
+        transform: translate(0, 0)
+      }
+
+      25% {
+        transform: translate(-2%, -3%)
+      }
+
+      50% {
+        transform: translate(3%, 2%)
+      }
+
+      75% {
+        transform: translate(-1%, 4%)
+      }
+
+      100% {
+        transform: translate(2%, -1%)
+      }
+    }
+
+    /* Floating abstract shapes */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.18;
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+
+    .hero-orb.o1 {
+      width: 600px;
+      height: 600px;
+      background: #c8a96e;
+      top: -10%;
+      left: -5%;
+      animation-delay: 0s
+    }
+
+    .hero-orb.o2 {
+      width: 400px;
+      height: 400px;
+      background: #2d4a3e;
+      top: 30%;
+      right: -5%;
+      animation-delay: -3s
+    }
+
+    .hero-orb.o3 {
+      width: 300px;
+      height: 300px;
+      background: #8a6040;
+      bottom: 10%;
+      left: 30%;
+      animation-delay: -5s
+    }
+
+    @keyframes orbFloat {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1)
+      }
+
+      50% {
+        transform: translate(20px, -30px) scale(1.05)
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px 80px;
+      min-height: 100vh;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+      animation: fadeUp 1s 0.2s both;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--accent)
+    }
+
+    .hero-h1 {
+      font-family: var(--serif);
+      font-size: clamp(52px, 8.5vw, 128px);
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: #f5f2ec;
+      margin-bottom: 40px;
+      max-width: 14ch;
+      animation: fadeUp 1s 0.4s both;
+    }
+
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--accent)
+    }
+
+    .hero-sub {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      animation: fadeUp 1s 0.6s both;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      line-height: 1.65;
+      color: rgba(245, 242, 236, 0.6);
+      max-width: 36ch;
+      font-weight: 300;
+    }
+
+    .hero-scroll {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245, 242, 236, 0.4);
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 48px;
+      background: rgba(245, 242, 236, 0.2);
+      animation: scrollPulse 2s ease infinite
+    }
+
+    @keyframes scrollPulse {
+
+      0%,
+      100% {
+        opacity: 0.2;
+        transform: scaleY(1)
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scaleY(0.6)
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* ─── SECTION COMMON ─────────────────────────────── */
+    section {
+      padding: 120px 48px
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 56px;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--light)
+    }
+
+    /* ─── INTRO STATEMENT ─────────────────────────────── */
+    .intro {
+      background: var(--cream);
+      padding: 120px 48px;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 80px;
+      align-items: start;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .intro-aside {
+      padding-top: 8px
+    }
+
+    .intro-aside p {
+      font-size: 12px;
+      line-height: 1.8;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--mid);
+      max-width: 20ch;
+    }
+
+    .intro-statement {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3.2vw, 46px);
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+
+    .intro-statement em {
+      font-style: italic;
+      color: var(--accent2)
+    }
+
+    /* ─── PROGRAMS ─────────────────────────────── */
+    .programs {
+      background: var(--cream2);
+      padding: 80px 0;
+    }
+
+    .programs-header {
+      padding: 0 48px 64px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 0;
+    }
+
+    .programs-header h2 {
+      font-family: var(--serif);
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .programs-header h2 em {
+      font-style: italic;
+      color: var(--accent2)
+    }
+
+    .see-all {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--mid);
+      transition: color 0.2s;
+      padding-bottom: 4px;
+    }
+
+    .see-all:hover {
+      color: var(--ink)
+    }
+
+    .see-all::after {
+      content: '→';
+      transition: transform 0.2s
+    }
+
+    .see-all:hover::after {
+      transform: translateX(4px)
+    }
+
+    .program-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .program-item {
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .program-item:last-child {
+      border-right: none
+    }
+
+    .program-img {
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      position: relative;
+      background: #1a1a18;
+    }
+
+    .program-img-inner {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .program-item:hover .program-img-inner {
+      transform: scale(1.06)
+    }
+
+    /* Gradient overlays per card */
+    .program-item:nth-child(1) .program-img-inner {
+      background-image: linear-gradient(160deg, #1a2818, #0e1a0c, #2d3a20)
+    }
+
+    .program-item:nth-child(2) .program-img-inner {
+      background-image: linear-gradient(160deg, #1a0e18, #0e0a18, #2d1a38)
+    }
+
+    .program-item:nth-child(3) .program-img-inner {
+      background-image: linear-gradient(160deg, #1a1208, #2a1a08, #3a2010)
+    }
+
+    .program-item:nth-child(4) .program-img-inner {
+      background-image: linear-gradient(160deg, #0a1820, #0c1828, #182030)
+    }
+
+    /* Decorative geometry inside cards */
+    .program-img::after {
+      content: '';
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      animation: spinSlow 20s linear infinite;
+    }
+
+    .program-item:nth-child(1) .program-img::after {
+      width: 200px;
+      height: 200px;
+      top: 20%;
+      left: 10%
+    }
+
+    .program-item:nth-child(2) .program-img::after {
+      width: 160px;
+      height: 160px;
+      top: 30%;
+      left: 20%;
+      animation-direction: reverse
+    }
+
+    .program-item:nth-child(3) .program-img::after {
+      width: 240px;
+      height: 240px;
+      top: 10%;
+      left: -20%
+    }
+
+    .program-item:nth-child(4) .program-img::after {
+      width: 180px;
+      height: 180px;
+      top: 25%;
+      left: 15%;
+      animation-delay: -5s
+    }
+
+    @keyframes spinSlow {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .program-num {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.3);
+      font-family: var(--sans);
+      font-weight: 300;
+    }
+
+    .program-meta {
+      padding: 24px 24px 32px;
+      background: var(--cream2);
+      border-top: 1px solid var(--rule);
+    }
+
+    .program-meta h3 {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 8px;
+      transition: color 0.2s;
+    }
+
+    .program-item:hover .program-meta h3 {
+      color: var(--accent2)
+    }
+
+    .program-meta p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--mid)
+    }
+
+    .program-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      transition: all 0.2s;
+    }
+
+    .program-item:hover .program-arrow {
+      color: var(--ink);
+      gap: 10px
+    }
+
+    /* ─── PHILOSOPHY ─────────────────────────────── */
+    .philosophy {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 140px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .philosophy::before {
+      content: '';
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200, 169, 110, 0.08) 0%, transparent 70%);
+      top: -200px;
+      right: -200px;
+      pointer-events: none;
+    }
+
+    .philosophy-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 120px;
+      align-items: center
+    }
+
+    .philosophy-text {}
+
+    .philosophy-text .section-label {
+      color: rgba(245, 242, 236, 0.3)
+    }
+
+    .philosophy-text .section-label::before {
+      background: rgba(245, 242, 236, 0.2)
+    }
+
+    .philosophy-text h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+      color: var(--cream);
+    }
+
+    .philosophy-text h2 em {
+      font-style: italic;
+      color: var(--accent)
+    }
+
+    .philosophy-text p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: rgba(245, 242, 236, 0.55);
+      margin-bottom: 16px;
+      font-weight: 300;
+    }
+
+    .philosophy-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 32px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(245, 242, 236, 0.3);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cream);
+      transition: all 0.2s;
+    }
+
+    .philosophy-link:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .philosophy-link:hover::after {
+      content: '→';
+      margin-left: 4px
+    }
+
+    .philosophy-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 0
+    }
+
+    .stat-row {
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(245, 242, 236, 0.1);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .stat-row:first-child {
+      border-top: 1px solid rgba(245, 242, 236, 0.1)
+    }
+
+    .stat-num {
+      font-family: var(--serif);
+      font-size: clamp(40px, 5vw, 72px);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(245, 242, 236, 0.4);
+      padding-top: 8px
+    }
+
+    /* ─── PARALLAX GALLERY ─────────────────────────────── */
+    .gallery {
+      background: var(--cream);
+      padding: 80px 0;
+      overflow: hidden;
+    }
+
+    .gallery-header {
+      padding: 0 48px 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .gallery-header h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    .gallery-header h2 em {
+      font-style: italic
+    }
+
+    .gallery-track {
+      display: flex;
+      gap: 16px;
+      padding: 0 48px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+    }
+
+    .gallery-track::-webkit-scrollbar {
+      display: none
+    }
+
+    .gallery-card {
+      flex: 0 0 340px;
+      height: 440px;
+      background: #1a1a18;
+      border-radius: 2px;
+      scroll-snap-align: start;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .gallery-card-bg {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.6s ease;
+    }
+
+    .gallery-card:hover .gallery-card-bg {
+      transform: scale(1.04)
+    }
+
+    .gallery-card:nth-child(1) .gallery-card-bg {
+      background-image: linear-gradient(135deg, #0e1a12, #1a2818, #0a1408);
+      background-color: #0e1a12
+    }
+
+    .gallery-card:nth-child(2) .gallery-card-bg {
+      background-image: linear-gradient(135deg, #18100a, #2a1a08, #1a1208);
+      background-color: #18100a
+    }
+
+    .gallery-card:nth-child(3) .gallery-card-bg {
+      background-image: linear-gradient(135deg, #080e1a, #101828, #0a1020);
+      background-color: #080e1a
+    }
+
+    .gallery-card:nth-child(4) .gallery-card-bg {
+      background-image: linear-gradient(135deg, #1a0a0e, #280e12, #1a0a10);
+      background-color: #1a0a0e
+    }
+
+    .gallery-card:nth-child(5) .gallery-card-bg {
+      background-image: linear-gradient(135deg, #0a1810, #102018, #0e1a14);
+      background-color: #0a1810
+    }
+
+    /* Geometric SVG overlays */
+    .gallery-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 60%);
+    }
+
+    .gallery-card-label {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      right: 24px;
+      z-index: 2;
+      font-family: var(--serif);
+      font-size: 18px;
+      color: #f5f2ec;
+      font-weight: 400;
+    }
+
+    .gallery-card-sub {
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(245, 242, 236, 0.45);
+      margin-bottom: 4px;
+    }
+
+    /* ─── WHAT'S ON / SIGNALS ─────────────────────────────── */
+    .signals-section {
+      background: var(--white);
+      padding: 120px 48px;
+    }
+
+    .signals-inner {
+      max-width: 1200px;
+      margin: 0 auto
+    }
+
+    .signals-section h2 {
+      font-family: var(--serif);
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 64px;
+    }
+
+    .signals-section h2 em {
+      font-style: italic;
+      color: var(--accent2)
+    }
+
+    .signal-list {
+      display: flex;
+      flex-direction: column
+    }
+
+    .signal-item {
+      display: grid;
+      grid-template-columns: 80px 1fr 120px 140px 80px;
+      align-items: center;
+      gap: 24px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--rule);
+      cursor: pointer;
+      transition: background 0.2s;
+      margin: 0 -48px;
+      padding: 24px 48px;
+    }
+
+    .signal-item:first-child {
+      border-top: 1px solid var(--rule)
+    }
+
+    .signal-item:hover {
+      background: var(--cream2)
+    }
+
+    .sig-num {
+      font-size: 11px;
+      color: var(--light);
+      letter-spacing: 0.1em
+    }
+
+    .sig-name {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400
+    }
+
+    .sig-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 14px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 100px;
+      border: 1px solid;
+    }
+
+    .sig-tag.buy {
+      color: #2d4a3e;
+      border-color: #2d4a3e;
+      background: rgba(45, 74, 62, 0.06)
+    }
+
+    .sig-tag.sell {
+      color: #6b2828;
+      border-color: #8b3030;
+      background: rgba(107, 40, 40, 0.06)
+    }
+
+    .sig-tag.hold {
+      color: #6b5c28;
+      border-color: #8b7830;
+      background: rgba(107, 92, 40, 0.06)
+    }
+
+    .sig-price {
+      font-size: 16px;
+      font-weight: 400;
+      text-align: right
+    }
+
+    .sig-conf {
+      font-size: 11px;
+      color: var(--mid);
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .sig-conf-bar {
+      width: 40px;
+      height: 2px;
+      background: var(--rule);
+      border-radius: 1px;
+      overflow: hidden
+    }
+
+    .sig-conf-fill {
+      height: 100%;
+      border-radius: 1px;
+      background: var(--ink);
+      transition: width 1s ease
+    }
+
+    .sig-arrow {
+      text-align: right;
+      color: var(--light);
+      transition: all 0.2s
+    }
+
+    .signal-item:hover .sig-arrow {
+      color: var(--ink);
+      transform: translateX(4px)
+    }
+
+    /* ─── PARALLAX STATEMENT ─────────────────────────────── */
+    .parallax-statement {
+      background: #1a1a18;
+      padding: 160px 48px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .parallax-statement::before {
+      content: 'INTELLIGENCE';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--serif);
+      font-size: 20vw;
+      font-weight: 400;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.018);
+      letter-spacing: -0.05em;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .parallax-statement blockquote {
+      font-family: var(--serif);
+      font-size: clamp(24px, 3.5vw, 52px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: var(--cream);
+      max-width: 20ch;
+      margin: 0 auto 32px;
+    }
+
+    .parallax-statement cite {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      font-style: normal;
+    }
+
+    /* ─── METRICS SECTION ─────────────────────────────── */
+    .metrics-section {
+      background: var(--cream);
+      padding: 120px 48px;
+    }
+
+    .metrics-inner {
+      max-width: 1200px;
+      margin: 0 auto
+    }
+
+    .metrics-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 72px;
+    }
+
+    .metrics-top h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 4.5vw, 64px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .metrics-top h2 em {
+      font-style: italic
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--rule);
+      border-left: 1px solid var(--rule);
+    }
+
+    .metric-cell {
+      padding: 40px 40px 48px;
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .metric-cell:hover {
+      background: var(--cream2)
+    }
+
+    .metric-cell-num {
+      font-family: var(--serif);
+      font-size: clamp(40px, 5vw, 68px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-cell-num.green {
+      color: var(--accent2)
+    }
+
+    .metric-cell-num.gold {
+      color: var(--accent)
+    }
+
+    .metric-cell-num.red {
+      color: #8b3030
+    }
+
+    .metric-cell-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 12px
+    }
+
+    .metric-cell-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--mid)
+    }
+
+    /* ─── CLIENTS SECTION ─────────────────────────────── */
+    .clients-section {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 0;
+    }
+
+    .clients-header {
+      padding: 80px 48px 48px;
+      border-bottom: 1px solid rgba(245, 242, 236, 0.08);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .clients-header h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 5vw, 72px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--cream);
+    }
+
+    .clients-header h2 em {
+      font-style: italic;
+      color: var(--accent)
+    }
+
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr)
+    }
+
+    .client-col {
+      padding: 40px 32px 48px;
+      border-right: 1px solid rgba(245, 242, 236, 0.08);
+      cursor: pointer;
+      transition: background 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .client-col:last-child {
+      border-right: none
+    }
+
+    .client-col::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .client-col:nth-child(1)::before {
+      background: var(--accent)
+    }
+
+    .client-col:nth-child(2)::before {
+      background: #7b9ea7
+    }
+
+    .client-col:nth-child(3)::before {
+      background: #7ba780
+    }
+
+    .client-col:nth-child(4)::before {
+      background: #a77b7b
+    }
+
+    .client-col:nth-child(5)::before {
+      background: #a79b7b
+    }
+
+    .client-col:hover::before {
+      transform: scaleX(1)
+    }
+
+    .client-col:hover {
+      background: rgba(245, 242, 236, 0.03)
+    }
+
+    .client-order {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: rgba(245, 242, 236, 0.2);
+      margin-bottom: 28px;
+    }
+
+    .client-name {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+
+    .client-stock {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(245, 242, 236, 0.3);
+      margin-bottom: 32px;
+    }
+
+    .client-loss {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .client-loss-lab {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245, 242, 236, 0.25)
+    }
+
+    .client-bar-wrap {
+      height: 1px;
+      background: rgba(245, 242, 236, 0.1);
+      margin-top: 24px
+    }
+
+    .client-bar {
+      height: 100%;
+      background: rgba(245, 242, 236, 0.4);
+      transition: width 1.5s ease
+    }
+
+    /* ─── LOG / NEWS ─────────────────────────────── */
+    .log-section {
+      background: var(--white);
+      padding: 120px 48px
+    }
+
+    .log-inner {
+      max-width: 1200px;
+      margin: 0 auto
+    }
+
+    .log-section h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 56px;
+    }
+
+    .log-section h2 em {
+      font-style: italic
+    }
+
+    .log-list {
+      display: flex;
+      flex-direction: column
+    }
+
+    .log-entry {
+      display: grid;
+      grid-template-columns: 180px 1fr 120px;
+      gap: 32px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 13px;
+      cursor: pointer;
+      transition: color 0.15s;
+      align-items: baseline;
+    }
+
+    .log-entry:first-child {
+      border-top: 1px solid var(--rule)
+    }
+
+    .log-entry:hover .log-msg-text {
+      color: var(--ink)
+    }
+
+    .log-ts {
+      color: var(--light);
+      font-family: 'Playfair Display', serif;
+      font-style: italic
+    }
+
+    .log-msg-text {
+      color: var(--mid);
+      line-height: 1.5;
+      transition: color 0.2s
+    }
+
+    .log-msg-text em {
+      font-style: normal;
+      color: var(--ink)
+    }
+
+    .log-lvl {
+      text-align: right;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .log-lvl.ok {
+      color: var(--accent2)
+    }
+
+    .log-lvl.info {
+      color: var(--accent)
+    }
+
+    .log-lvl.warn {
+      color: #8b6030
+    }
+
+    /* ─── FOOTER ─────────────────────────────── */
+    footer {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 80px 48px 40px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 80px;
+      padding-bottom: 80px;
+      border-bottom: 1px solid rgba(245, 242, 236, 0.1);
+    }
+
+    .footer-brand {}
+
+    .footer-brand h2 {
+      font-family: var(--serif);
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .footer-brand h2 em {
+      font-style: italic;
+      color: var(--accent)
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(245, 242, 236, 0.4);
+      max-width: 28ch
+    }
+
+    .footer-col h3 {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(245, 242, 236, 0.25);
+      margin-bottom: 24px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .footer-col ul li a {
+      font-size: 14px;
+      color: rgba(245, 242, 236, 0.5);
+      transition: color 0.2s;
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--cream)
+    }
+
+    .footer-bottom {
+      padding-top: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: rgba(245, 242, 236, 0.2);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── SCROLL ANIMATIONS ─────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: none
+    }
+
+    .reveal-d1 {
+      transition-delay: 0.1s
+    }
+
+    .reveal-d2 {
+      transition-delay: 0.2s
+    }
+
+    .reveal-d3 {
+      transition-delay: 0.3s
+    }
+
+    .reveal-d4 {
+      transition-delay: 0.4s
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="cur"></div>
+  <div id="cur-ring"></div>
+
+  <!-- ─── NAV ─────────────────── -->
+  <nav id="nav">
+    <div class="nav-logo">NEXUS <em>Intelligence</em></div>
+    <div class="nav-links">
+      <a href="#philosophy">The System</a>
+      <a href="#programs">Models</a>
+      <a href="#signals">Signals</a>
+      <a href="#metrics">Performance</a>
+      <a href="#clients">Nodes</a>
+    </div>
+    <button class="nav-cta" onclick="window.location.href='/dashboard'">Launch Dashboard</button>
+  </nav>
+
+  <!-- ─── HERO ─────────────────── -->
+  <section class="hero" id="home">
+    <div class="hero-video-wrap">
+      <div class="hero-video-bg">
+        <div class="hero-orb o1"></div>
+        <div class="hero-orb o2"></div>
+        <div class="hero-orb o3"></div>
+      </div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Federated Learning · Algorithmic Trading</div>
+      <h1 class="hero-h1">Where data stays <em>private.</em> Intelligence grows.</h1>
+      <div class="hero-sub">
+        <p class="hero-desc">A decentralised system that trains a global price prediction model across five market nodes
+          — without any node ever sharing its raw data.</p>
+        <div class="hero-scroll">
+          <div class="hero-scroll-line"></div>
+          Scroll
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INTRO STATEMENT ─────────────────── -->
+  <div class="intro reveal">
+    <div class="intro-grid">
+      <div class="intro-aside">
+        <p>Federated intelligence. No data leaves a node. Only wisdom travels.</p>
+      </div>
+      <p class="intro-statement">
+        We believe traders should not have to choose between <em>privacy</em> and predictive power. At NEXUS, each node
+        trains locally and shares only model weights — never raw market data.
+      </p>
+    </div>
+  </div>
+
+  <!-- ─── PROGRAMS / MODELS ─────────────────── -->
+  <div class="programs" id="programs">
+    <div class="programs-header reveal">
+      <h2>The <em>models</em><br>& methods</h2>
+      <a href="#" class="see-all">All components</a>
+    </div>
+    <div class="program-grid">
+      <div class="program-item reveal reveal-d1">
+        <div class="program-img">
+          <div class="program-img-inner"></div>
+          <div class="program-num">01</div>
+        </div>
+        <div class="program-meta">
+          <h3>LSTM Architecture</h3>
+          <p>Two-layer recurrent network. 128 hidden units. Xavier-initialised gates. Forget bias = 1.</p>
+          <div class="program-arrow">Explore <span>→</span></div>
+        </div>
+      </div>
+      <div class="program-item reveal reveal-d2">
+        <div class="program-img">
+          <div class="program-img-inner"></div>
+          <div class="program-num">02</div>
+        </div>
+        <div class="program-meta">
+          <h3>FedAvg Protocol</h3>
+          <p>Weighted aggregation of client parameters. w_global ← Σ(n_k / N)·w_k. 15 rounds.</p>
+          <div class="program-arrow">Explore <span>→</span></div>
+        </div>
+      </div>
+      <div class="program-item reveal reveal-d3">
+        <div class="program-img">
+          <div class="program-img-inner"></div>
+          <div class="program-num">03</div>
+        </div>
+        <div class="program-meta">
+          <h3>Signal Engine</h3>
+          <p>Buy · Sell · Hold signals derived from predicted vs current price ratios with configurable thresholds.</p>
+          <div class="program-arrow">Explore <span>→</span></div>
+        </div>
+      </div>
+      <div class="program-item reveal reveal-d4">
+        <div class="program-img">
+          <div class="program-img-inner"></div>
+          <div class="program-num">04</div>
+        </div>
+        <div class="program-meta">
+          <h3>Backtesting</h3>
+          <p>Long-only strategy simulation with 0.1% transaction costs. Mark-to-market equity tracking.</p>
+          <div class="program-arrow">Explore <span>→</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PHILOSOPHY ─────────────────── -->
+  <section class="philosophy" id="philosophy">
+    <div class="philosophy-inner">
+      <div class="philosophy-text reveal">
+        <div class="section-label">Our Approach</div>
+        <h2>Intelligence without <em>exposure.</em></h2>
+        <p>In traditional ML systems, all data must travel to a central server. NEXUS inverts this — the model travels
+          to the data. Each client trains on its own private market history and sends only weight updates back.</p>
+        <p>The result is a global model that has learned from AAPL, TSLA, MSFT, AMZN and GOOGL data — without any of
+          those datasets ever leaving their respective nodes.</p>
+        <a href="#" class="philosophy-link">Read the whitepaper</a>
+      </div>
+      <div class="philosophy-stats reveal reveal-d2">
+        <div class="stat-row">
+          <div class="stat-num">5</div>
+          <div class="stat-label">Federated client nodes, each holding an independent temporal data shard</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-num">15</div>
+          <div class="stat-label">Communication rounds per training session with full FedAvg aggregation</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-num">−68%</div>
+          <div class="stat-label">Loss reduction from round 1 to round 15 across the global model</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-num">1.87</div>
+          <div class="stat-label">Annualised Sharpe Ratio achieved in backtesting on out-of-sample data</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── GALLERY ─────────────────── -->
+  <div class="gallery reveal" id="gallery">
+    <div class="gallery-header">
+      <h2>NEXUS <em>in action</em></h2>
+      <a href="#" class="see-all">View all</a>
+    </div>
+    <div class="gallery-track" id="galleryTrack">
+      <div class="gallery-card">
+        <div class="gallery-card-bg"
+          style="background-image:linear-gradient(135deg,#0e1a12 0%,#1a2818 50%,#0a1408 100%)">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 340 440">
+            <circle cx="170" cy="200" r="120" fill="none" stroke="white" stroke-width="0.5" />
+            <circle cx="170" cy="200" r="80" fill="none" stroke="white" stroke-width="0.3" />
+            <circle cx="170" cy="200" r="40" fill="none" stroke="white" stroke-width="0.2" />
+            <line x1="0" y1="200" x2="340" y2="200" stroke="white" stroke-width="0.3" />
+            <line x1="170" y1="0" x2="170" y2="440" stroke="white" stroke-width="0.3" />
+          </svg>
+        </div>
+        <div class="gallery-card-label">
+          <div class="gallery-card-sub">Training Round 12</div>Federation converging
+        </div>
+      </div>
+      <div class="gallery-card">
+        <div class="gallery-card-bg">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 340 440">
+            <polyline points="20,380 60,320 100,300 140,260 180,240 220,180 260,160 300,120 340,80" fill="none"
+              stroke="white" stroke-width="1.5" />
+            <polyline points="20,400 60,350 100,330 140,295 180,270 220,215 260,190 300,150 340,110" fill="none"
+              stroke="white" stroke-width="0.6" stroke-dasharray="4,4" />
+          </svg>
+        </div>
+        <div class="gallery-card-label">
+          <div class="gallery-card-sub">Prediction vs Actual</div>AAPL price forecast
+        </div>
+      </div>
+      <div class="gallery-card">
+        <div class="gallery-card-bg">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 340 440">
+            <circle cx="170" cy="200" r="8" fill="white" />
+            <line x1="170" y1="200" x2="80" y2="100" stroke="white" stroke-width="0.6" />
+            <line x1="170" y1="200" x2="260" y2="100" stroke="white" stroke-width="0.6" />
+            <line x1="170" y1="200" x2="40" y2="260" stroke="white" stroke-width="0.6" />
+            <line x1="170" y1="200" x2="300" y2="260" stroke="white" stroke-width="0.6" />
+            <line x1="170" y1="200" x2="170" y2="340" stroke="white" stroke-width="0.6" />
+            <circle cx="80" cy="100" r="20" fill="none" stroke="white" stroke-width="0.8" />
+            <circle cx="260" cy="100" r="20" fill="none" stroke="white" stroke-width="0.8" />
+            <circle cx="40" cy="260" r="20" fill="none" stroke="white" stroke-width="0.8" />
+            <circle cx="300" cy="260" r="20" fill="none" stroke="white" stroke-width="0.8" />
+            <circle cx="170" cy="340" r="20" fill="none" stroke="white" stroke-width="0.8" />
+          </svg>
+        </div>
+        <div class="gallery-card-label">
+          <div class="gallery-card-sub">Network Topology</div>Five nodes, one intelligence
+        </div>
+      </div>
+      <div class="gallery-card">
+        <div class="gallery-card-bg">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 340 440">
+            <rect x="40" y="80" width="260" height="8" rx="4" fill="white" />
+            <rect x="40" y="112" width="200" height="8" rx="4" fill="white" />
+            <rect x="40" y="144" width="230" height="8" rx="4" fill="white" />
+            <rect x="40" y="200" width="260" height="2" fill="white" opacity="0.3" />
+            <polyline points="40,360 80,310 120,290 160,250 200,220 240,180 280,150 300,120" fill="none" stroke="white"
+              stroke-width="2" />
+            <polyline points="40,380 80,350 120,330 160,300 200,275 240,240 280,200 300,175" fill="none" stroke="white"
+              stroke-width="1" stroke-dasharray="4,4" />
+          </svg>
+        </div>
+        <div class="gallery-card-label">
+          <div class="gallery-card-sub">Portfolio Growth</div>Strategy vs buy &amp; hold
+        </div>
+      </div>
+      <div class="gallery-card">
+        <div class="gallery-card-bg">
+          <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" viewBox="0 0 340 440">
+            <rect x="60" y="320" width="40" height="80" fill="white" />
+            <rect x="120" y="260" width="40" height="140" fill="white" opacity="0.7" />
+            <rect x="180" y="290" width="40" height="110" fill="white" opacity="0.8" />
+            <rect x="240" y="240" width="40" height="160" fill="white" opacity="0.6" />
+            <polyline points="40,80 60,78 120,74 180,72 240,68 300,62" fill="none" stroke="white" stroke-width="1" />
+          </svg>
+        </div>
+        <div class="gallery-card-label">
+          <div class="gallery-card-sub">Loss Convergence</div>Rounds 1–15
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SIGNALS ─────────────────── -->
+  <section class="signals-section" id="signals">
+    <div class="signals-inner">
+      <div class="section-label reveal">Live signals</div>
+      <h2 class="reveal">Latest <em>market</em><br>intelligence</h2>
+      <div class="signal-list reveal">
+        <div class="signal-item">
+          <div class="sig-num">01</div>
+          <div class="sig-name">Apple Inc · AAPL</div>
+          <div><span class="sig-tag buy">Buy</span></div>
+          <div class="sig-price">$178.42 → <span style="color:var(--accent2)">$181.20</span></div>
+          <div class="sig-conf">
+            <div class="sig-conf-bar">
+              <div class="sig-conf-fill" style="width:87%"></div>
+            </div> 87%
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="sig-num">02</div>
+          <div class="sig-name">Tesla Inc · TSLA</div>
+          <div><span class="sig-tag hold">Hold</span></div>
+          <div class="sig-price">$242.18 → <span style="color:var(--mid)">$243.01</span></div>
+          <div class="sig-conf">
+            <div class="sig-conf-bar">
+              <div class="sig-conf-fill" style="width:52%"></div>
+            </div> 52%
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="sig-num">03</div>
+          <div class="sig-name">Microsoft Corp · MSFT</div>
+          <div><span class="sig-tag sell">Sell</span></div>
+          <div class="sig-price">$414.83 → <span style="color:#8b3030">$411.20</span></div>
+          <div class="sig-conf">
+            <div class="sig-conf-bar">
+              <div class="sig-conf-fill" style="width:78%"></div>
+            </div> 78%
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="sig-num">04</div>
+          <div class="sig-name">Amazon.com · AMZN</div>
+          <div><span class="sig-tag buy">Buy</span></div>
+          <div class="sig-price">$186.41 → <span style="color:var(--accent2)">$190.33</span></div>
+          <div class="sig-conf">
+            <div class="sig-conf-bar">
+              <div class="sig-conf-fill" style="width:91%"></div>
+            </div> 91%
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="sig-num">05</div>
+          <div class="sig-name">Alphabet Inc · GOOGL</div>
+          <div><span class="sig-tag buy">Buy</span></div>
+          <div class="sig-price">$168.22 → <span style="color:var(--accent2)">$171.84</span></div>
+          <div class="sig-conf">
+            <div class="sig-conf-bar">
+              <div class="sig-conf-fill" style="width:83%"></div>
+            </div> 83%
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PARALLAX STATEMENT ─────────────────── -->
+  <div class="parallax-statement">
+    <blockquote>"The model learns from everyone. The data stays with no one."</blockquote>
+    <cite>NEXUS — Federated Intelligence Protocol</cite>
+  </div>
+
+  <!-- ─── METRICS ─────────────────── -->
+  <section class="metrics-section" id="metrics">
+    <div class="metrics-inner">
+      <div class="metrics-top reveal">
+        <h2>System <em>performance</em><br>at a glance</h2>
+        <a href="#" class="see-all">Full report</a>
+      </div>
+      <div class="metrics-grid reveal">
+        <div class="metric-cell">
+          <div class="metric-cell-label">Cumulative Return</div>
+          <div class="metric-cell-num green">+38.5%</div>
+          <div class="metric-cell-desc">Total portfolio return over the backtest period starting from $10,000 initial
+            capital</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-cell-label">Sharpe Ratio</div>
+          <div class="metric-cell-num gold">1.87</div>
+          <div class="metric-cell-desc">Annualised risk-adjusted return against a 252-day benchmark. Above 1.0
+            threshold.</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-cell-label">RMSE</div>
+          <div class="metric-cell-num" style="color:var(--ink)">2.341</div>
+          <div class="metric-cell-desc">Root mean squared error of global model price predictions in original price
+            scale</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-cell-label">Max Drawdown</div>
+          <div class="metric-cell-num red">−14.2%</div>
+          <div class="metric-cell-desc">Worst peak-to-trough equity decline during the backtest simulation period</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-cell-label">MAPE</div>
+          <div class="metric-cell-num gold">1.94%</div>
+          <div class="metric-cell-desc">Mean absolute percentage error — model predictions within 2% of actual prices on
+            average</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-cell-label">Global Loss Drop</div>
+          <div class="metric-cell-num green">−68%</div>
+          <div class="metric-cell-desc">MSE loss reduction across 15 federated rounds from 0.0312 to 0.0041</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CLIENTS ─────────────────── -->
+  <div class="clients-section" id="clients">
+    <div class="clients-header reveal">
+      <h2>Client <em>nodes</em></h2>
+      <a href="#" class="see-all" style="color:rgba(245,242,236,0.4)">View all</a>
+    </div>
+    <div class="clients-grid">
+      <div class="client-col reveal reveal-d1">
+        <div class="client-order">01</div>
+        <div class="client-name">AAPL</div>
+        <div class="client-stock">Apple Inc · 412 samples</div>
+        <div class="client-loss">0.0038</div>
+        <div class="client-loss-lab">Local Loss</div>
+        <div class="client-bar-wrap">
+          <div class="client-bar" style="width:34%"></div>
+        </div>
+      </div>
+      <div class="client-col reveal reveal-d2">
+        <div class="client-order">02</div>
+        <div class="client-name">TSLA</div>
+        <div class="client-stock">Tesla Inc · 398 samples</div>
+        <div class="client-loss">0.0059</div>
+        <div class="client-loss-lab">Local Loss</div>
+        <div class="client-bar-wrap">
+          <div class="client-bar" style="width:51%"></div>
+        </div>
+      </div>
+      <div class="client-col reveal reveal-d3">
+        <div class="client-order">03</div>
+        <div class="client-name">MSFT</div>
+        <div class="client-stock">Microsoft · 421 samples</div>
+        <div class="client-loss">0.0031</div>
+        <div class="client-loss-lab">Local Loss</div>
+        <div class="client-bar-wrap">
+          <div class="client-bar" style="width:29%"></div>
+        </div>
+      </div>
+      <div class="client-col reveal reveal-d4">
+        <div class="client-order">04</div>
+        <div class="client-name">AMZN</div>
+        <div class="client-stock">Amazon · 408 samples</div>
+        <div class="client-loss">0.0047</div>
+        <div class="client-loss-lab">Local Loss</div>
+        <div class="client-bar-wrap">
+          <div class="client-bar" style="width:44%"></div>
+        </div>
+      </div>
+      <div class="client-col reveal reveal-d4">
+        <div class="client-order">05</div>
+        <div class="client-name">GOOGL</div>
+        <div class="client-stock">Alphabet · 395 samples</div>
+        <div class="client-loss">0.0042</div>
+        <div class="client-loss-lab">Local Loss</div>
+        <div class="client-bar-wrap">
+          <div class="client-bar" style="width:37%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── LOG ─────────────────── -->
+  <section class="log-section">
+    <div class="log-inner">
+      <div class="section-label reveal">System Log</div>
+      <h2 class="reveal">Latest <em>activity</em></h2>
+      <div class="log-list reveal">
+        <div class="log-entry">
+          <div class="log-ts">12:04:11</div>
+          <div class="log-msg-text">Round <em>12</em> complete · FedAvg aggregation · avg_loss=<em>0.00413</em></div>
+          <div class="log-lvl ok">Success</div>
+        </div>
+        <div class="log-entry">
+          <div class="log-ts">12:04:06</div>
+          <div class="log-msg-text">Broadcasting global weights to <em>5 clients</em> · 183,424 parameters</div>
+          <div class="log-lvl info">Info</div>
+        </div>
+        <div class="log-entry">
+          <div class="log-ts">12:03:58</div>
+          <div class="log-msg-text">Round <em>11</em> complete · avg_loss=<em>0.00451</em> · all clients reported</div>
+          <div class="log-lvl ok">Success</div>
+        </div>
+        <div class="log-entry">
+          <div class="log-ts">12:03:50</div>
+          <div class="log-msg-text">Client_2 TSLA — high volatility shard detected · loss spike monitoring</div>
+          <div class="log-lvl warn">Warning</div>
+        </div>
+        <div class="log-entry">
+          <div class="log-ts">12:03:40</div>
+          <div class="log-msg-text">Global model checkpoint saved → <em>global_model.pt</em> · 183,424 params</div>
+          <div class="log-lvl ok">Saved</div>
+        </div>
+        <div class="log-entry">
+          <div class="log-ts">12:03:20</div>
+          <div class="log-msg-text">Gradient clipping triggered in <em>3 batches</em> · norm exceeded 1.0</div>
+          <div class="log-lvl info">Info</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─────────────────── -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h2>NEXUS <em>Intelligence</em></h2>
+        <p>A federated learning system for algorithmic trading. Privacy-preserving. Production-grade.</p>
+      </div>
+      <div class="footer-col">
+        <h3>System</h3>
+        <ul>
+          <li><a href="#">Data Loader</a></li>
+          <li><a href="#">LSTM Model</a></li>
+          <li><a href="#">Federated Client</a></li>
+          <li><a href="#">FedAvg Server</a></li>
+          <li><a href="#">Backtest Engine</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">FedAvg Paper</a></li>
+          <li><a href="#">Flower Framework</a></li>
+          <li><a href="#">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>NEXUS Federated Intelligence · Built with PyTorch &amp; Python</span>
+      <span>Privacy-preserving ML · No raw data shared</span>
+    </div>
+  </footer>
+
+  <script>
+    // ─── CURSOR
+    const cur = document.getElementById('cur');
+    const ring = document.getElementById('cur-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+    });
+    (function anim() {
+      rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(anim);
+    })();
+
+    // ─── NAV SOLID ON SCROLL
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('solid', window.scrollY > 80);
+    }, { passive: true });
+
+    // ─── SCROLL REVEAL
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // ─── GALLERY DRAG SCROLL
+    const track = document.getElementById('galleryTrack');
+    let isDown = false, startX, scrollLeft;
+    track.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; track.style.cursor = 'grabbing'; });
+    track.addEventListener('mouseleave', () => { isDown = false; track.style.cursor = ''; });
+    track.addEventListener('mouseup', () => { isDown = false; track.style.cursor = ''; });
+    track.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - track.offsetLeft; const walk = (x - startX) * 1.6; track.scrollLeft = scrollLeft - walk; });
+
+    // ─── SIGNAL BARS ANIMATE IN
+    setTimeout(() => {
+      document.querySelectorAll('.sig-conf-fill').forEach(el => {
+        const w = el.style.width; el.style.width = '0';
+        setTimeout(() => { el.style.transition = 'width 1.2s cubic-bezier(0.4,0,0.2,1)'; el.style.width = w; }, 200);
+      });
+    }, 800);
+  </script>
+</body>
+
+</html>
