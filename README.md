@@ -1,182 +1,81 @@
-# Federated Learning Algorithmic Trading System
+# Nexus Intelligence: Federated Learning Control Center
 
-A decentralised stock price prediction and trading system that trains a global LSTM model across multiple clients without sharing raw data — implementing the **FedAvg** algorithm.
+![Nexus Intelligence Dashboard](./public/dashboard_preview.png)
 
----
+**Nexus Intelligence** is a cutting-edge web application built for college research demonstrations. It showcases a **Federated Learning (FedAvg)** network in real-time. Instead of gathering all sensitive data in one central location, Federated Learning allows individual nodes (clients) to train machine learning models locally. Only the insights (weights/gradients) are shared with the central server, dramatically enhancing privacy and security.
 
-## Architecture Overview
+This dashboard visualizes that process, simulating real-world stock prediction data using actual historical prices for Apple, Alphabet, Tesla, Microsoft, and Amazon.
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│                      FEDERATED SERVER                        │
-│   Global LSTM Model  ←──── FedAvg Aggregation               │
-│        │  ↑                                                  │
-│   Broadcast weights   Receive updated weights                │
-└────┬───┴──────────────────────────────────────────┬─────────┘
-     │                                              │
-┌────▼──────┐   ┌───────────┐   ...   ┌────────────▼──────┐
-│ Client 1  │   │ Client 2  │         │    Client N       │
-│ AAPL data │   │ TSLA data │         │  RELIANCE data    │
-│ Local LSTM│   │ Local LSTM│         │  Local LSTM       │
-└───────────┘   └───────────┘         └───────────────────┘
-```
+## 🚀 Features
 
-### Data Flow (privacy-preserving)
-1. Each client holds its own private stock data (never leaves the device)
-2. Server broadcasts global model weights → each client
-3. Each client trains locally for N epochs
-4. Clients send *only model weights* (not raw data) back to server
-5. Server aggregates via weighted FedAvg → new global model
-6. Repeat for R rounds
+- **Secure Access:** Client-side authentication gate simulating a secured admin portal.
+- **Federated Topology Visualization:** A visual graph of the network, showing the Aggregator node and the 5 Edge clients.
+- **Real-Time Training Simulation:** Click "Run Training Round" to watch the global loss decrease and accuracy increase as clients train their local datasets and average their weights.
+- **Live Trading Performance Metrics:**
+  - **Equity Curve:** Watch a simulated portfolio equity curve built from the aggregated model's predictions.
+  - **Sharpe Ratio:** Real-time risk/reward analysis for the FedAvg model versus individual stock performance.
+- **Premium Dark UI Aesthetic:** Glassmorphism UI, fluid animations using Framer Motion, and high-performance Recharts for data visualization.
 
 ---
 
-## Project Structure
+## 🛠️ Technology Stack
 
-```
-federated_trading/
-├── data_loader.py        # Yahoo Finance fetch, feature engineering, partitioning
-├── model.py              # LSTM architecture (PyTorch)
-├── client.py             # Federated client (local training)
-├── server.py             # FedAvg server (aggregation)
-├── train.py              # Main pipeline (entry point)
-├── utils.py              # Metrics, signals, backtesting, plotting
-├── flower_simulation.py  # (Optional) Flower framework integration
-├── requirements.txt
-└── README.md
-```
+- **Frontend Framework:** [React 18](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **Styling:** Vanilla CSS + [Tailwind CSS](https://tailwindcss.com/) (Dark Neon Cyberpunk Theme)
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)
+- **Charts & Data Viz:** [Recharts](https://recharts.org/)
+- **Icons:** [Google Material Symbols](https://fonts.google.com/icons)
+- **Routing:** [React Router v6](https://reactrouter.com/)
 
 ---
 
-## Quick Start
+## 💻 Getting Started (Local Setup)
 
-### 1. Install dependencies
-```bash
-pip install -r requirements.txt
-```
+Follow these steps to run the application on your machine for the presentation:
 
-### 2. Run the full pipeline
-```bash
-python train.py
-```
+### Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) installed on your computer.
 
-### 3. (Optional) Flower simulation
-```bash
-pip install flwr
-python flower_simulation.py
-```
+### 1. Install Dependencies
+Open your terminal in the project directory and run:
+`npm install`
 
----
+### 2. Start the Development Server
+Run the following command to start the Vite server:
+`npm run dev`
 
-## Configuration
+### 3. Open the Application
+Navigate to `http://localhost:5173` in your browser.
 
-All settings are in the `CONFIG` dict at the top of `train.py`:
+- You will land on the marketing presentation page (`nexus_site.html`).
+- To access the control dashboard, click the dashboard link or go directly to `http://localhost:5173/login`.
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `tickers` | AAPL, TSLA, MSFT, AMZN, GOOGL | Stock symbols to train on |
-| `num_clients` | 5 | Number of federated participants |
-| `fl_rounds` | 15 | Total federated communication rounds |
-| `local_epochs` | 3 | Local training epochs per client per round |
-| `seq_len` | 30 | Look-back window in days |
-| `hidden_size` | 128 | LSTM hidden units |
-| `buy_threshold` | 0.005 | Min predicted upside to trigger BUY |
-| `iid_split` | False | Temporal (non-IID) partition for realism |
+### 4. Login Credentials (Demo)
+Since this is a research demo, use the following credentials to access the secure dashboard:
+- **Username:** `admin`
+- **Password:** `nexus2026`
 
 ---
 
-## LSTM Model
+## 🧠 How the Simulation Works (Under the Hood)
 
-```
-Input (B, 30, F)
-     ↓
-LSTM × 2 layers (hidden=128, dropout=0.2)
-     ↓
-Last timestep hidden state
-     ↓
-LayerNorm → Linear(128→64) → ReLU → Dropout → Linear(64→1)
-     ↓
-Predicted next Close price (scaled)
-```
+For the purpose of the research demonstration, the Federated Learning system runs entirely in your browser using JavaScript, though it perfectly mimics the architecture of a real Python backend:
 
-Features (F = 15):
-- OHLCV (5)
-- SMA-10, SMA-30, EMA-12 (3)
-- RSI-14 (1)
-- MACD, MACD Signal (2)
-- Bollinger Width, %B (2)
-- 1-day return, 5-day return (2)
+1. **Initialization:** The `FederatedEngine` class loads real historical JSON stock data for 5 major tech companies.
+2. **Local Training:** When you click "Run Training Round", each client node simulates "training" on its own specific stock data to recognize patterns. It returns local "weights" to the server.
+3. **Aggregation (FedAvg):** The server averages these weights using the standard Federated Averaging mechanism.
+4. **Metrics Update:** The dashboard visually updates the Global Loss (decreasing) and Global Accuracy (increasing), then updates the equity curve chart based on the new prediction capability.
 
 ---
 
-## Trading Strategy
+## 📁 Key Files & Architecture
+If you need to explain the code for your college viva/presentation, point them to these important files:
 
-| Signal | Condition |
-|--------|-----------|
-| **BUY** | `predicted / current > 1 + 0.005` |
-| **SELL** | `predicted / current < 1 - 0.002` |
-| **HOLD** | otherwise |
-
-Backtest rules:
-- Long-only strategy
-- 0.1% transaction cost per trade
-- Initial capital: $10,000
+- `src/simulation/federatedEngine.js` — The core logic that drives the federated learning simulation.
+- `src/simulation/stockData.js` — Handles data shaping, moving averages, and MACD simulation logic.
+- `src/pages/Dashboard.jsx` — The main React component tying together the Sidebar, Header, and Chart states.
+- `src/components/charts/AnalyticsCharts.jsx` — Uses Recharts and `useMemo` to draw the simulated equity curves and calculate Sharpe ratios in real-time.
 
 ---
 
-## Evaluation Metrics
-
-| Metric | Description |
-|--------|-------------|
-| RMSE | Prediction error in original price scale |
-| MAE | Mean absolute prediction error |
-| MAPE % | Mean absolute percentage error |
-| Sharpe Ratio | Risk-adjusted return (annualised, 252 days) |
-| Max Drawdown % | Worst peak-to-trough equity decline |
-| Cumulative Return % | Total strategy return over backtest period |
-
----
-
-## Output Files (`outputs/`)
-
-| File | Description |
-|------|-------------|
-| `predictions.png` | Predicted vs actual price chart |
-| `portfolio.png` | Equity curve + buy/sell signals |
-| `federated_loss.png` | Global & per-client loss across rounds |
-| `global_model.pt` | Saved global model weights |
-| `training.log` | Full training log |
-
----
-
-## Extending the System
-
-### Add more stocks
-```python
-CONFIG["tickers"] = ["AAPL", "TSLA", "RELIANCE.NS", "TCS.NS", "INFY.NS"]
-```
-
-### Switch to FedProx (alternative aggregation)
-Replace `server.aggregate()` with proximal term minimisation:
-```python
-# Add μ/2 * ||w - w_global||² to local loss
-```
-
-### Add differential privacy
-```python
-from opacus import PrivacyEngine
-privacy_engine = PrivacyEngine()
-model, optimizer, loader = privacy_engine.make_private(...)
-```
-
-### Use Flower for real distributed training
-See `flower_simulation.py` — replace `start_simulation` with
-`fl.server.start_server` + per-client `fl.client.start_client`.
-
----
-
-## References
-
-- McMahan et al. (2017). *Communication-Efficient Learning of Deep Networks from Decentralized Data*. [FedAvg paper]
-- Beutel et al. (2020). *Flower: A Friendly Federated Learning Research Framework*.
-- Hochreiter & Schmidhuber (1997). *Long Short-Term Memory*.
+*Built with precision for advanced architectural research.*

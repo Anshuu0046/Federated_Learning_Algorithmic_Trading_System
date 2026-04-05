@@ -1,19 +1,29 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
+import LoginPage from './pages/LoginPage';
 
 import Cursor from './components/ui/Cursor';
 
 function App() {
   return (
     <ThemeProvider>
-      <Cursor />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<RedirectToNexus />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <Cursor />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<RedirectToNexus />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
