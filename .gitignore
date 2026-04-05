@@ -12,6 +12,16 @@ dist
 dist-ssr
 *.local
 
+# Python
+__pycache__
+*.pyc
+.venv
+
+# Build/Debug artifacts
+outputs
+*.pt
+eslint_report*.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

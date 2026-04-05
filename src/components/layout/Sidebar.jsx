@@ -1,25 +1,24 @@
-import React from 'react';
 import { motion as Motion } from 'framer-motion';
-import { LayoutDashboard, Network, LineChart, ShieldCheck } from 'lucide-react';
 
 const navItems = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'network', label: 'Federation', icon: Network },
-    { id: 'analytics', label: 'Performance', icon: LineChart },
-    { id: 'security', label: 'Privacy', icon: ShieldCheck },
+    { id: 'overview', label: 'Dashboard', materialIcon: 'dashboard' },
+    { id: 'network', label: 'Federation', materialIcon: 'hub' },
+    { id: 'analytics', label: 'Performance', materialIcon: 'monitoring' },
+    { id: 'security', label: 'Privacy', materialIcon: 'shield' },
 ];
 
-const Sidebar = ({ activeTab, setActiveTab }) => {
+const Sidebar = ({ activeTab, setActiveTab, onRunRound, isTraining }) => {
     return (
-        <div className="w-64 h-full bg-cream border-r border-rule flex flex-col">
-            <div className="flex-1 py-12 px-8 flex flex-col gap-6">
-                <div className="text-[10px] tracking-[0.2em] uppercase text-mid mb-4 flex items-center gap-3">
-                    <div className="w-4 h-px bg-light"></div>
-                    Menu
-                </div>
+        <div className="w-64 h-full flex flex-col bg-[rgba(2,6,16,0.8)] backdrop-blur-2xl border-r border-[rgba(99,102,241,0.1)] shadow-[24px_0_48px_rgba(0,0,0,0.4)]">
+            {/* Brand */}
+            <div className="mb-10 px-8 pt-8">
+                <h1 className="text-lg font-black text-[#818cf8]" style={{ fontFamily: 'Manrope' }}>Nexus Intelligence</h1>
+                <p className="text-[10px] text-[#475569] uppercase tracking-widest mt-1">Federated Core V1.2</p>
+            </div>
 
+            {/* Nav Items */}
+            <nav className="flex-1 px-4 space-y-1">
                 {navItems.map((item, index) => {
-                    const Icon = item.icon;
                     const isActive = activeTab === item.id;
 
                     return (
@@ -29,43 +28,32 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.1 * index }}
                             onClick={() => setActiveTab(item.id)}
-                            className={`group flex items-center gap-4 py-3 relative transition-all duration-300 ${isActive ? 'text-ink' : 'text-mid hover:text-ink interactive'
+                            className={`group flex items-center gap-3 w-full py-3 px-4 rounded-xl relative transition-all duration-300 ${isActive
+                                ? 'bg-[rgba(99,102,241,0.1)] text-[#818cf8] shadow-[0_0_15px_rgba(99,102,241,0.2)] translate-x-1'
+                                : 'text-[#64748b] hover:text-[#94a3b8] hover:bg-[rgba(99,102,241,0.05)]'
                                 }`}
                         >
-                            {/* Active Indicator Line */}
-                            {isActive && (
-                                <Motion.div
-                                    layoutId="activeTabSidebar"
-                                    className="absolute left-[-32px] top-1/2 -translate-y-1/2 w-1 h-8 bg-accent"
-                                />
-                            )}
-
-                            <Icon
-                                size={18}
-                                className={`transition-all duration-300 ${isActive ? 'text-accent' : 'text-light group-hover:text-mid'}`}
-                                strokeWidth={isActive ? 2 : 1.5}
-                            />
-                            <span className={`font-serif text-xl tracking-tight ${isActive ? 'font-medium' : ''}`}>
-                                {item.label}
+                            <span
+                                className="material-symbols-outlined text-xl"
+                                style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24" }}
+                            >
+                                {item.materialIcon}
                             </span>
+                            <span className="text-sm font-medium">{item.label}</span>
                         </Motion.button>
                     );
                 })}
-            </div>
+            </nav>
 
             {/* Bottom Area */}
-            <div className="p-8 border-t border-rule space-y-4">
-                <div className="text-[10px] tracking-[0.2em] uppercase text-mid flex items-center gap-3">
-                    <div className="w-4 h-px bg-light"></div>
-                    Node Status
-                </div>
-                <div className="font-serif text-lg text-ink">
-                    5 / 5 <span className="text-mid italic text-sm">Online</span>
-                </div>
-                <div className="w-full h-px bg-rule mt-4" />
-                <div className="text-xs text-mid leading-relaxed">
-                    NEXUS Protocol<br />Local training active.
-                </div>
+            <div className="p-6 border-t border-[rgba(99,102,241,0.1)]">
+                <button
+                    onClick={onRunRound}
+                    disabled={isTraining}
+                    className={`w-full bg-gradient-to-r from-primary to-secondary text-on-primary-fixed py-3 rounded-xl font-bold glow-primary text-sm tracking-wide transition-transform hover:scale-[1.02] ${isTraining ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                    {isTraining ? 'Training...' : 'Run Training Round'}
+                </button>
             </div>
         </div>
     );

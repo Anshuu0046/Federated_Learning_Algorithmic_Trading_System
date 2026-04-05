@@ -2,24 +2,59 @@
 
 @theme {
   /* Override default font families */
-  --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Playfair Display', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-headline: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Manrope', ui-sans-serif, system-ui, sans-serif;
 
-  /* Custom Color Palette based on nexus_site.html */
-  --color-cream: #f5f2ec;
-  --color-cream2: #ede9df;
-  --color-ink: #1a1a18;
-  --color-ink2: #2d2d29;
-  --color-mid: #8a8a80;
-  --color-light: #c4c0b4;
-  --color-rule: #d6d2c8;
-  --color-accent: #c8a96e;
-  /* Gold */
-  --color-accent2: #2d4a3e;
-  /* Forest Green */
-  --color-white: #faf9f6;
-  --color-danger: #8b3030;
-  /* Rust Red for negative signals */
+  /* ─── Neon Architect Dark Palette ─────────────── */
+  --color-surface: #060e20;
+  --color-surface-dim: #060e20;
+  --color-surface-bright: #1f2b49;
+  --color-surface-container: #0f1930;
+  --color-surface-container-low: #091328;
+  --color-surface-container-high: #141f38;
+  --color-surface-container-highest: #192540;
+  --color-surface-variant: #192540;
+
+  --color-on-surface: #dee5ff;
+  --color-on-surface-variant: #a3aac4;
+  --color-outline: #6d758c;
+  --color-outline-variant: #40485d;
+
+  --color-primary: #9fa7ff;
+  --color-primary-dim: #8a95ff;
+  --color-primary-container: #8d98ff;
+  --color-on-primary: #101b8b;
+  --color-on-primary-fixed: #000000;
+  --color-inverse-primary: #4954bc;
+
+  --color-secondary: #9093ff;
+  --color-secondary-dim: #6063ee;
+  --color-secondary-container: #2f2ebe;
+  --color-on-secondary: #080079;
+
+  --color-tertiary: #7de9ff;
+  --color-tertiary-dim: #1ad0eb;
+  --color-tertiary-container: #3adffa;
+  --color-on-tertiary: #005561;
+
+  --color-error: #ff6e84;
+  --color-error-dim: #d73357;
+  --color-error-container: #a70138;
+  --color-on-error: #490013;
+
+  /* Legacy aliases for compatibility */
+  --color-cream: #060e20;
+  --color-cream2: #0f1930;
+  --color-ink: #dee5ff;
+  --color-ink2: #a3aac4;
+  --color-mid: #a3aac4;
+  --color-light: #6d758c;
+  --color-rule: #40485d;
+  --color-accent: #9fa7ff;
+  --color-accent2: #7de9ff;
+  --color-white: #192540;
+  --color-danger: #ff6e84;
 }
 
 /* ─── BASE STYLES ─────────────────────────────── */
@@ -27,87 +62,109 @@
 
   html,
   body {
-    @apply bg-cream text-ink font-sans font-light overflow-x-hidden;
+    @apply bg-surface text-on-surface font-sans font-normal overflow-x-hidden;
     cursor: none;
-    /* Hide default cursor for custom cursor */
   }
 
-  /* Typography */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply font-serif font-normal tracking-tight leading-tight;
+    font-family: var(--font-headline);
+    @apply font-bold tracking-tight leading-tight;
   }
 
   em {
     @apply italic;
   }
 
-  /* Hide scrollbar for clean editorial look */
   ::-webkit-scrollbar {
-    display: none;
+    width: 6px;
   }
 
-  * {
-    scrollbar-width: none;
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface-container);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-outline-variant);
+    border-radius: 3px;
   }
 }
 
 /* ─── CUSTOM CURSOR ─────────────────────────────── */
 @layer components {
   .cursor-dot {
-    @apply fixed w-2 h-2 rounded-full bg-ink pointer-events-none z-[9999];
+    @apply fixed w-2 h-2 rounded-full bg-primary pointer-events-none z-[9999];
     transform: translate(-50%, -50%);
     transition: transform 0.15s, background 0.2s, width 0.25s, height 0.25s;
   }
 
   .cursor-ring {
     @apply fixed w-10 h-10 rounded-full pointer-events-none z-[9998];
-    border: 1px solid rgba(26, 26, 24, 0.3);
+    border: 1px solid rgba(159, 167, 255, 0.3);
     transform: translate(-50%, -50%);
     transition: all 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
-  /* Hover states for interactive elements */
   body:has(a:hover) .cursor-dot,
   body:has(button:hover) .cursor-dot,
   body:has(.interactive:hover) .cursor-dot {
-    @apply w-3.5 h-3.5 bg-accent;
+    @apply w-3.5 h-3.5 bg-tertiary;
   }
 
   body:has(a:hover) .cursor-ring,
   body:has(button:hover) .cursor-ring,
   body:has(.interactive:hover) .cursor-ring {
-    @apply w-14 h-14 border-accent opacity-50;
+    @apply w-14 h-14 border-tertiary opacity-50;
   }
 
-  /* ─── EDITORIAL COMPONENTS ─────────────────────────────── */
+  /* ─── GLASSMORPHISM CARDS ─────────────────────────────── */
+  .glass-card {
+    background: rgba(25, 37, 64, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+  }
 
-  /* Replace glassmorphism with elegant bordered containers */
+  .glass-card:hover {
+    border-color: rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 30px rgba(159, 167, 255, 0.08);
+  }
+
+  /* Legacy editorial-card alias → glass-card */
   .editorial-card {
-    @apply bg-white border border-rule transition-colors duration-200;
+    background: rgba(25, 37, 64, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
   }
 
   .editorial-card:hover {
-    @apply bg-cream2;
+    border-color: rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 30px rgba(159, 167, 255, 0.08);
   }
 
-  /* Section Labels (Small uppercase tracking text) */
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(159, 167, 255, 0.2);
+  }
+
+  /* Section Labels */
   .section-label {
-    @apply flex items-center gap-4 text-[10px] tracking-[0.2em] uppercase text-mid mb-8;
+    @apply flex items-center gap-4 text-[10px] tracking-[0.2em] uppercase text-on-surface-variant mb-8;
   }
 
   .section-label::before {
     content: '';
-    @apply w-6 h-px bg-light;
+    @apply w-6 h-px bg-outline;
   }
 
-  /* Stat Number (Large serif numbers) */
+  /* Stat Number */
   .stat-num {
-    @apply font-serif text-4xl sm:text-5xl md:text-6xl font-normal leading-none tracking-[-0.03em];
+    font-family: var(--font-headline);
+    @apply text-4xl sm:text-5xl md:text-6xl font-black leading-none tracking-[-0.03em];
   }
 
   /* Signal Tags */
@@ -116,37 +173,37 @@
   }
 
   .sig-tag-buy {
-    @apply text-accent2 border-accent2 bg-accent2/5;
+    @apply text-tertiary border-tertiary;
+    background: rgba(125, 233, 255, 0.1);
   }
 
   .sig-tag-sell {
-    @apply text-danger border-danger bg-danger/5;
+    @apply text-error border-error;
+    background: rgba(255, 110, 132, 0.1);
   }
 
   .sig-tag-hold {
-    @apply text-[#6b5c28] border-[#8b7830] bg-[#6b5c28]/5;
+    @apply text-primary border-primary;
+    background: rgba(159, 167, 255, 0.1);
   }
 
-  /* Minimal Button */
+  /* Neon Button */
   .nav-cta {
-    @apply text-[12px] tracking-[0.1em] uppercase px-6 py-2.5 border border-ink text-ink bg-transparent cursor-pointer transition-all duration-300 font-sans font-normal;
+    @apply text-[12px] tracking-[0.1em] uppercase px-6 py-2.5 border border-outline-variant text-on-surface bg-surface-container-high cursor-pointer transition-all duration-300 font-sans font-medium rounded-lg;
   }
 
   .nav-cta:hover {
-    @apply bg-ink text-cream;
+    @apply bg-primary text-on-primary border-primary;
+    box-shadow: 0 0 20px rgba(159, 167, 255, 0.3);
   }
 
   /* Link With Arrow */
   .link-arrow {
-    @apply inline-flex items-center gap-2 text-xs tracking-[0.1em] uppercase text-mid transition-colors duration-200 pb-1 cursor-none;
-  }
-
-  .link-arrow.interactive {
-    cursor: none;
+    @apply inline-flex items-center gap-2 text-xs tracking-[0.1em] uppercase text-on-surface-variant transition-colors duration-200 pb-1 cursor-none;
   }
 
   .link-arrow:hover {
-    @apply text-ink;
+    @apply text-primary;
   }
 
   .link-arrow::after {
@@ -164,36 +221,36 @@
 
   .recharts-cartesian-grid-horizontal line,
   .recharts-cartesian-grid-vertical line {
-    stroke: var(--color-rule);
-    stroke-opacity: 0.5;
+    stroke: var(--color-outline-variant);
+    stroke-opacity: 0.3;
     stroke-dasharray: 4 4;
   }
 
   .recharts-text,
   .recharts-cartesian-axis-tick-value {
-    fill: var(--color-mid) !important;
+    fill: var(--color-on-surface-variant) !important;
     font-family: var(--font-sans) !important;
     font-size: 11px !important;
     letter-spacing: 0.05em !important;
-    font-weight: 300 !important;
+    font-weight: 400 !important;
   }
 
   .recharts-tooltip-cursor {
-    fill: var(--color-cream2);
+    fill: var(--color-surface-container-high);
     opacity: 0.5;
   }
 
   .recharts-default-tooltip {
-    background-color: var(--color-ink) !important;
-    border: 1px solid var(--color-ink2) !important;
-    border-radius: 2px !important;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2) !important;
+    background-color: var(--color-surface-container-highest) !important;
+    border: 1px solid var(--color-outline-variant) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
     padding: 12px 16px !important;
     font-family: var(--font-sans) !important;
   }
 
   .recharts-tooltip-label {
-    color: var(--color-light) !important;
+    color: var(--color-on-surface-variant) !important;
     font-size: 10px !important;
     letter-spacing: 0.1em !important;
     text-transform: uppercase !important;
@@ -201,7 +258,7 @@
   }
 
   .recharts-tooltip-item {
-    color: var(--color-cream) !important;
+    color: var(--color-on-surface) !important;
     padding-top: 4px !important;
     font-size: 13px !important;
   }

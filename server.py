@@ -223,10 +223,10 @@ class FederatedServer:
     def save(self, path: str) -> None:
         """Save global model weights to disk."""
         torch.save(self.global_model.state_dict(), path)
-        logger.info(f"Global model saved → {path}")
+        logger.info(f"Global model saved -> {path}")
 
     def load(self, path: str) -> None:
         """Load global model weights from disk."""
         state = torch.load(path, map_location=self.device)
         self.global_model.load_state_dict(state)
-        logger.info(f"Global model loaded ← {path}")
+        logger.info(f"Global model loaded <- {path}")

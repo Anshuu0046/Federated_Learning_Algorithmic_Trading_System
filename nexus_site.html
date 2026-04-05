@@ -2,6 +2,14 @@
 <html lang="en">
 
 <head>
+  <script>
+    // Prevent browser from restoring previous scroll position on reload
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    // Instantly reset to top before page renders
+    window.scrollTo(0, 0);
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>NEXUS — Federated Intelligence</title>
@@ -1974,6 +1982,7 @@
   </footer>
 
   <script>
+
     // ─── CURSOR
     const cur = document.getElementById('cur');
     const ring = document.getElementById('cur-ring');
@@ -1994,10 +2003,49 @@
       nav.classList.toggle('solid', window.scrollY > 80);
     }, { passive: true });
 
-    // ─── SCROLL REVEAL
+    // ─── SCROLL REVEAL DYNAMIC SETUP ───
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .reveal {
+        opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .reveal.in {
+        opacity: 1;
+      transform: translateY(0);
+      }
+      .delay-1 {transition - delay: 0.1s; }
+      .delay-2 {transition - delay: 0.2s; }
+      .delay-3 {transition - delay: 0.3s; }
+      .delay-4 {transition - delay: 0.4s; }
+      `;
+    document.head.appendChild(style);
+
+    const revealTargets = document.querySelectorAll(
+      "section:not(.hero) h2, section:not(.hero) h3, section:not(.hero) p, .program-item, .journal-card, .vision-stat, .gallery-item, .philosophy-text, .philosophy-stats, .footer-section, .metric-cell, .journal-img, .intro-statement"
+    );
+
+    let staggers = {};
+    revealTargets.forEach(el => {
+      el.classList.add('reveal');
+      const parentId = el.parentElement.className;
+      if (parentId.includes('grid') || parentId.includes('gallery') || parentId.includes('metrics') || parentId.includes('stat')) {
+        staggers[parentId] = (staggers[parentId] || 0) + 1;
+        const delay = Math.min(staggers[parentId], 4);
+        el.classList.add('delay-' + delay);
+      }
+    });
+
     const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.01, rootMargin: '50px 0px 0px 0px' });
+
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
     // ─── GALLERY DRAG SCROLL

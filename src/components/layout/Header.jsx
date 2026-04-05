@@ -1,37 +1,34 @@
-import React from 'react';
-import { Activity } from 'lucide-react';
 
-const Header = ({ round }) => {
+
+const Header = ({ round, maxRounds }) => {
     return (
-        <header className="sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-b border-rule h-[72px] px-12 flex items-center justify-between">
+        <header className="sticky top-0 z-40 bg-[rgba(6,14,32,0.6)] backdrop-blur-xl border-b border-[rgba(99,102,241,0.1)] h-[72px] px-8 flex items-center justify-between shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
             {/* Brand */}
             <div className="flex items-center gap-12">
-                <div className="font-serif text-lg text-ink font-medium tracking-[0.02em]">
-                    NEXUS <span className="italic text-accent">Intelligence</span>
-                </div>
+                <span className="text-xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-[#818cf8] to-[#60a5fa]" style={{ fontFamily: 'Manrope' }}>
+                    Nexus Intelligence
+                </span>
             </div>
 
             {/* Center - Status */}
             <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6">
-                <div className="flex items-center gap-3 px-4 py-1.5 border border-rule rounded-full bg-cream2/50 backdrop-blur-sm">
+                <div className="flex items-center gap-3 px-4 py-1.5 border border-[rgba(99,102,241,0.1)] rounded-full bg-[rgba(20,31,56,0.5)] backdrop-blur-sm">
                     <div className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
                     </div>
-                    <span className="text-[10px] uppercase tracking-[0.1em] text-ink font-medium">System Live</span>
+                    <span className="text-[10px] uppercase tracking-[0.1em] text-tertiary font-medium drop-shadow-[0_0_8px_rgba(125,233,255,0.4)]">System Live</span>
                 </div>
 
-                <div className="text-[10px] uppercase tracking-[0.1em] text-mid">
-                    Round {round} / 15
+                <div className="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant">
+                    Round {round} / {maxRounds}
                 </div>
             </div>
 
-            {/* Right side */}
-            <div className="flex items-center gap-6">
-                <div className="text-[10px] tracking-[0.2em] uppercase text-mid flex items-center gap-3">
-                    <div className="w-4 h-px bg-light"></div>
-                    Protocol Active
-                </div>
+            {/* Right side - Federated Learning badge */}
+            <div className="flex items-center gap-3 px-4 py-1.5 border border-[rgba(99,102,241,0.1)] rounded-full bg-[rgba(20,31,56,0.5)] backdrop-blur-sm">
+                <span className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24" }}>model_training</span>
+                <span className="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant">FedAvg Protocol</span>
             </div>
         </header>
     );

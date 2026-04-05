@@ -1,4 +1,4 @@
-import { generateStockData, generatePredictions, generateSignals, calculateReturns } from './stockData';
+import { generateStockData, generatePredictions, generateSignals, calculateReturns, TICKER_NAMES } from './stockData';
 
 const NUM_CLIENTS = 5;
 const MAX_ROUNDS = 20;
@@ -20,7 +20,7 @@ function createClient(id) {
 
     return {
         id,
-        name: `Client ${id + 1}`,
+        name: TICKER_NAMES[id] || `Client ${id + 1}`,
         status: 'idle', // idle | training | uploading | updated
         stockData,
         predictions,
@@ -199,7 +199,7 @@ export class FederatedEngine {
                 actual: lastData.price,
                 prediction: lastPred.predicted,
                 signal: lastSig.signal,
-                confidence: 65 + Math.random() * 30, // Mock confidence percentage
+                confidence: Math.min(99, Math.max(50, c.accuracy * 100)),
                 history: c.stockData.map((d, i) => ({
                     time: d.date,
                     actual: d.price,

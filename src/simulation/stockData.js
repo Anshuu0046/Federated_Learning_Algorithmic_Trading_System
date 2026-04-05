@@ -69,35 +69,4 @@ export function calculateReturns(data) {
     });
 }
 
-export function calculateSharpeRatio(returns, windowSize = 20) {
-    const result = [];
-    for (let i = 0; i < returns.length; i++) {
-        if (i < windowSize) {
-            result.push({ date: returns[i].date, sharpe: 0 });
-            continue;
-        }
-        const window = returns.slice(i - windowSize, i).map((r) => r.dailyReturn);
-        const mean = window.reduce((s, v) => s + v, 0) / window.length;
-        const std = Math.sqrt(
-            window.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / window.length
-        );
-        const sharpe = std > 0 ? (mean / std) * Math.sqrt(252) : 0;
-        result.push({ date: returns[i].date, sharpe: Math.round(sharpe * 100) / 100 });
-    }
-    return result;
-}
-
-export function calculateDrawdown(data) {
-    let peak = data[0].price;
-    return data.map((d) => {
-        if (d.price > peak) peak = d.price;
-        const drawdown = (d.price - peak) / peak;
-        return {
-            date: d.date,
-            drawdown: Math.round(drawdown * 10000) / 10000,
-            price: d.price,
-        };
-    });
-}
-
 export { TICKERS, TICKER_NAMES };

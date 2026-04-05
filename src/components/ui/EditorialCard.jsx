@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion as Motion } from 'framer-motion';
 
 const EditorialCard = ({ children, className = '', delay = 0, onClick }) => {
@@ -12,7 +11,7 @@ const EditorialCard = ({ children, className = '', delay = 0, onClick }) => {
                 ease: [0.16, 1, 0.3, 1]
             }}
             onClick={onClick}
-            className={`bg-white border text-ink border-rule transition-colors duration-300 hover:bg-cream2 
+            className={`glass-card rounded-xl text-on-surface
         ${onClick ? 'cursor-none interactive' : ''} ${className}`}
         >
             {children}

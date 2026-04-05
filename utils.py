@@ -136,7 +136,7 @@ def generate_signals(current_prices: np.ndarray,
     buys = (signals == 1).sum()
     sells = (signals == -1).sum()
     holds = (signals == 0).sum()
-    logger.info(f"Signals → BUY={buys} | SELL={sells} | HOLD={holds}")
+    logger.info(f"Signals -> BUY={buys} | SELL={sells} | HOLD={holds}")
     return signals
 
 
@@ -365,7 +365,7 @@ def print_metrics_table(metrics: Dict[str, float]) -> None:
 def _save_or_show(fig: plt.Figure, path: Optional[str]) -> None:
     if path:
         fig.savefig(path, dpi=150, bbox_inches="tight")
-        logger.info(f"Plot saved → {path}")
+        logger.info(f"Plot saved -> {path}")
     else:
         plt.show()
     plt.close(fig)
