@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
 import EditorialCard from '../ui/EditorialCard';
 
-const AnalyticsCharts = ({ history, clients }) => {
+const AnalyticsCharts = ({ clients }) => {
     const performanceData = useMemo(() => {
         // Compute a portfolio equity curve from real client stock data
         if (!clients || clients.length === 0) return [];

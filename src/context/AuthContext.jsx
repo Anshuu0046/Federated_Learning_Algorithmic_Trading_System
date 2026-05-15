@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext(null);
 
@@ -8,21 +8,20 @@ const VALID_USERS = [
     { username: 'demo', password: 'demo', role: 'Viewer' },
 ];
 
-export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const stored = localStorage.getItem('nexus_auth');
-        if (stored) {
-            try {
-                setUser(JSON.parse(stored));
-            } catch {
-                localStorage.removeItem('nexus_auth');
-            }
+function getInitialUser() {
+    const stored = localStorage.getItem('nexus_auth');
+    if (stored) {
+        try {
+            return JSON.parse(stored);
+        } catch {
+            localStorage.removeItem('nexus_auth');
         }
-        setLoading(false);
-    }, []);
+    }
+    return null;
+}
+
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(getInitialUser);
 
     const login = (username, password) => {
         const found = VALID_USERS.find(
@@ -43,10 +42,11 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, logout, loading: false }}>
             {children}
         </AuthContext.Provider>
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
