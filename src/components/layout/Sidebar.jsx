@@ -1,4 +1,5 @@
 import { motion as Motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const navItems = [
     { id: 'overview', label: 'Dashboard', materialIcon: 'dashboard' },
@@ -8,6 +9,7 @@ const navItems = [
 ];
 
 const Sidebar = ({ activeTab, setActiveTab, onRunRound, isTraining }) => {
+    const navigate = useNavigate();
     return (
         <div className="w-64 h-full flex flex-col bg-[rgba(2,6,16,0.8)] backdrop-blur-2xl border-r border-[rgba(99,102,241,0.1)] shadow-[24px_0_48px_rgba(0,0,0,0.4)]">
             {/* Brand */}
@@ -46,13 +48,20 @@ const Sidebar = ({ activeTab, setActiveTab, onRunRound, isTraining }) => {
             </nav>
 
             {/* Bottom Area */}
-            <div className="p-6 border-t border-[rgba(99,102,241,0.1)]">
+            <div className="p-6 border-t border-[rgba(99,102,241,0.1)] space-y-2">
                 <button
                     onClick={onRunRound}
                     disabled={isTraining}
                     className={`w-full bg-gradient-to-r from-primary to-secondary text-on-primary-fixed py-3 rounded-xl font-bold glow-primary text-sm tracking-wide transition-transform hover:scale-[1.02] ${isTraining ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                     {isTraining ? 'Training...' : 'Run Training Round'}
+                </button>
+                <button
+                    onClick={() => navigate('/docs')}
+                    className="w-full flex items-center justify-center gap-2 border border-outline-variant text-on-surface-variant py-3 rounded-xl text-sm tracking-wide transition-all hover:border-primary hover:text-primary"
+                >
+                    <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24" }}>description</span>
+                    Documentation
                 </button>
             </div>
         </div>

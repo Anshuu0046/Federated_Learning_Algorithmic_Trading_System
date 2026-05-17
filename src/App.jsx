@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import LoginPage from './pages/LoginPage';
+import DocsPage from './pages/DocsPage';
 
 import Cursor from './components/ui/Cursor';
 
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<RedirectToNexus />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/docs" element={<DocsPage />} />
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
